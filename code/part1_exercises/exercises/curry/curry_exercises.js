@@ -6,15 +6,25 @@ var _ = require('ramda');
 //==============
 // Refactor to remove all arguments by partially applying the function
 
-var words = function(str) {
-  return split(' ', str);
+var words = function(div) {
+  return function(str) {
+    return split(div, str);
+  }
 };
+
+var wordsBySpace = words(' ');
+var wordsByPipe = words('|');
+
+// console.log(wordsByPipe('First Second Third|Half'));
+
 
 // Exercise 1a
 //==============
 // Use map to make a new words fn that works on an array of strings.
 
-var sentences = undefined;
+var sentences = map(wordsBySpace);
+
+// console.log(sentences(['First Half', 'Second Half', 'Third Monad']));
 
 
 // Exercise 2
@@ -22,9 +32,12 @@ var sentences = undefined;
 // Refactor to remove all arguments by partially applying the functions
 
 var filterQs = function(xs) {
-  return filter(function(x){ return match(/q/i, x);  }, xs);
+  return filter(function(x) {
+    return match(/q/i, x);
+  }, xs);
 };
 
+console.log(filterQs(['Firstq', 'MYq', 'Not']));
 
 // Exercise 3
 //==============
@@ -40,7 +53,7 @@ var max = function(xs) {
   }, -Infinity, xs);
 };
 
-  
+
 // Bonus 1:
 // ============
 // wrap array's slice to be functional and curried.
