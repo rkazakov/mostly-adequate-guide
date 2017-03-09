@@ -1,7 +1,7 @@
 require('../../support');
 var _ = require('ramda');
 var accounting = require('accounting');
-  
+
 // Example Data
 var CARS = [
     {name: "Ferrari FF", horsepower: 660, dollar_value: 700000, in_stock: true},
@@ -19,6 +19,10 @@ var isLastInStock = function(cars) {
   var reversed_cars = _.last(cars);
   return _.prop('in_stock', reversed_cars)
 };
+
+var isLastInStockFP = _.compose(_.prop('in_stock'), _.last);
+
+console.log(isLastInStockFP(CARS));
 
 // Exercise 2:
 // ============
