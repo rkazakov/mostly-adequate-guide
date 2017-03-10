@@ -6,38 +6,33 @@ var _ = require('ramda');
 //==============
 // Refactor to remove all arguments by partially applying the function
 
-var words = function(div) {
-  return function(str) {
-    return split(div, str);
-  }
+var words = function(str) {
+  return split(' ', str);
 };
 
-var wordsBySpace = words(' ');
-var wordsByPipe = words('|');
+const wordsFP = _.split(' ');
 
-// console.log(wordsByPipe('First Second Third|Half'));
-
+console.log(wordsFP('This is me!'));
 
 // Exercise 1a
 //==============
 // Use map to make a new words fn that works on an array of strings.
 
-var sentences = map(wordsBySpace);
+var sentences = _.map(wordsFP);
 
-// console.log(sentences(['First Half', 'Second Half', 'Third Monad']));
-
+console.log(sentences(['This is me!', 'And this is you!']));
 
 // Exercise 2
 //==============
 // Refactor to remove all arguments by partially applying the functions
 
 var filterQs = function(xs) {
-  return filter(function(x) {
-    return match(/q/i, x);
-  }, xs);
+  return filter(function(x){ return match(/q/i, x);  }, xs);
 };
 
-console.log(filterQs(['Firstq', 'MYq', 'Not']));
+const filterQsFP = _.filter(match(/q/i));
+
+console.log(filterQsFP(['myq', 'yourq', 'not you']));
 
 // Exercise 3
 //==============
@@ -53,18 +48,21 @@ var max = function(xs) {
   }, -Infinity, xs);
 };
 
+const maxFP = _.reduce(_keepHighest, -Infinity);
+
+console.log(maxFP([1, 5, 9, 4]));
 
 // Bonus 1:
 // ============
 // wrap array's slice to be functional and curried.
 // //[1,2,3].slice(0, 2)
-var slice = undefined;
+var slice = _.curry((start, end, xs) => xs.slice(start, end));
 
 
 // Bonus 2:
 // ============
 // use slice to define a function "take" that takes n elements. Make it curried
-var take = undefined;
+var take = slice(0);
 
 
 module.exports = { words: words,
