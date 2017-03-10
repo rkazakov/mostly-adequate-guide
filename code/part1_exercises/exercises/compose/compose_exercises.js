@@ -27,8 +27,9 @@ console.log(isLastInStockFP(CARS));
 // Exercise 2:
 // ============
 // use _.compose(), _.prop() and _.head() to retrieve the name of the first car
-var nameOfFirstCar = undefined;
+var nameOfFirstCar = _.compose(_.prop('name'), _.head);
 
+console.log(nameOfFirstCar(CARS));
 
 // Exercise 3:
 // ============
@@ -40,15 +41,21 @@ var averageDollarValue = function(cars) {
   return _average(dollar_values);
 };
 
+var averageDollarValueFP = _.compose(_average, map(_.prop('dollar_value')));
+
+console.log(averageDollarValueFP(CARS));
 
 // Exercise 4:
 // ============
-// Write a function: sanitizeNames() using compose that takes an array of cars and returns a list of lowercase and underscored names: e.g: sanitizeNames([{name: "Ferrari FF"}]) //=> ["ferrari_ff"].
+// Write a function: sanitizeNames() using compose that takes an array of cars
+// and returns a list of lowercase and underscored names:
+// e.g: sanitizeNames([{name: "Ferrari FF"}]) //=> ["ferrari_ff"].
 
 var _underscore = replace(/\W+/g, '_'); //<-- leave this alone and use to sanitize
 
-var sanitizeNames = undefined;
+var sanitizeNames = _.map(_.compose(_underscore, _.toLower, _.prop('name')));
 
+console.log(sanitizeNames(CARS));
 
 // Bonus 1:
 // ============
@@ -61,6 +68,10 @@ var availablePrices = function(cars) {
   }).join(', ');
 };
 
+var availablePricesFP = _.compose(join(', '), _.map(accounting.formatMoney),
+  _.map(_.prop('dollar_value')), _.filter(_.prop('in_stock')));
+
+console.log(availablePricesFP(CARS));
 
 // Bonus 2:
 // ============
@@ -72,6 +83,11 @@ var fastestCar = function(cars) {
   return fastest.name + ' is the fastest';
 };
 
+var mergeText = (a) => ''.concat(a, ' is the fastest');
+
+var fastestCarFP = _.compose(mergeText, _.prop('name'), _.last, _.sortBy(_.prop('horsepower')));
+
+console.log(fastestCarFP(CARS));
 
 module.exports = { CARS: CARS,
                    isLastInStock: isLastInStock,
